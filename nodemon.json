@@ -1,0 +1,9 @@
+{
+    "env": {
+        "MONGO_USER": "dbadmin",
+        "MONGO_PASSWORD": "dbadmin",
+        "MONGO_ADDRESS": "cluster0.7puwz.mongodb.net",
+        "MONGO_DEFAULT_DATABASE": "messages",
+        "PORT": 8080
+    }
+}
