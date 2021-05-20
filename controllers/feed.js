@@ -6,6 +6,7 @@ const path = require('path');
 const Post = require('../models/post');
 const User = require('../models/user');
 const io = require('../socket');
+const unsplash = require('../services/unsplash');
 
 exports.getPosts = async (req, res, next) => {
     const currentPage = req.query.page || 1;

@@ -1,7 +1,5 @@
 const express = require('express');
 const { body } = require('express-validator/check');
-const { createApi } = require('unsplash-js');
-const nodeFetch = require('node-fetch');
 
 const feedController = require('../controllers/feed');
 const isAuth = require('../middleware/is-auth');
@@ -57,35 +55,5 @@ router.put(
   [body('status').trim().notEmpty()],
   feedController.updateStatus
 );
-
-// GET /feed/photo
-router.get('/photo', isAuth, async (req, res, next) => {
-  try {
-    const unsplash = createApi({
-      accessKey: process.env.UNSPLASH_KEY,
-      fetch: nodeFetch
-    });
-
-    const result = await unsplash.search.getPhotos({
-      query: req.query.term
-    });
-
-    if (result.errors) {
-        const error = new Error(result.errors.join(', '));
-        error.statusCode = 500;
-        throw error;
-    }
-
-    res.status(200).json({
-      message: 'Fetched photo successfully',
-      photo: result.response
-    });
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-});
 
 module.exports = router;
