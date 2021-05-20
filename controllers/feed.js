@@ -38,23 +38,21 @@ exports.getPosts = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
+    console.log(req.body);
+
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
         const error = new Error('Validation failed');
         error.statusCode = 422;
-        throw error;
+        next(error);
     }
-
-    if (!req.file) {
-        const error = new Error('No image provided');
-        error.statusCode = 422;
-        throw error;
-    }
-
+    
     const title = req.body.title;
     const content = req.body.content;
-    const imageUrl = req.file.path.replace('\\', '/');
+
+    const image = await unsplash.getRandomPhoto(title, 50, 10);
+    const imageUrl = image ? image.urls.small : null;
 
     const post = new Post({
         title: title,
@@ -127,22 +125,12 @@ exports.updatePost = async (req, res, next) => {
     if (!errors.isEmpty()) {
         const error = new Error('Validation failed');
         error.statusCode = 422;
-        throw error;
+        next(error);
     }
 
     const title = req.body.title;
     const content = req.body.content;
-    let imageUrl = req.body.image;
-
-    if (req.file) {
-        imageUrl = req.file.path.replace('\\', '/');
-    }
-
-    if (!imageUrl) {
-        const error = new Error('No image provided');
-        error.statusCode = 422;
-        throw error;
-    }
+    let imageUrl;
 
     try {
         const post = await Post.findById(postId).populate('creator');
@@ -152,14 +140,17 @@ exports.updatePost = async (req, res, next) => {
             throw error;
         }
 
+        if (title !== post.title) {
+            const image = await unsplash.getRandomPhoto(title, 50, 10);
+            imageUrl = image ? image.urls.small : post.imageUrl;
+        }
+        else
+            imageUrl = post.imageUrl;
+
         if (post.creator._id.toString() !== req.userId) {
             const error = new Error('Not authorized!');
             error.statusCode = 403;
             throw error;
-        }
-
-        if (imageUrl !== post.imageUrl) {
-            clearImage(post.imageUrl.replace('\\', '/'));
         }
 
         post.title = title;
@@ -184,11 +175,6 @@ exports.updatePost = async (req, res, next) => {
     }
 };
 
-const clearImage = filePath => {
-    console.log('delete image here ' + filePath);
-    filePath = path.join(__dirname, '..', filePath);
-    fs.unlink(filePath, err => console.log(err));
-};
 
 exports.deletePost = async (req, res, next) => {
     const postId = req.params.postId;
@@ -206,8 +192,6 @@ exports.deletePost = async (req, res, next) => {
             error.statusCode = 403;
             throw error;
         }
-
-        clearImage(post.imageUrl.replace('\\', '/'));
 
         await Post.findByIdAndRemove(postId);
         const user = await User.findById(req.userId);
@@ -257,7 +241,7 @@ exports.updateStatus = async (req, res, next) => {
         const error = new Error('Validation failed');
         error.statusCode = 422;
         error.data = errors.array();
-        throw error;
+        next(error);
     }
 
     const newStatus = req.body.status;
