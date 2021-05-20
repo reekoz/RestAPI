@@ -1,8 +1,6 @@
 const express = require('express');
 const { json } = require('body-parser');
 const mongoose = require('mongoose');
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
 const feedRoutes = require('./routes/feed');
 const authRoutes = require('./routes/auth');
 const helmet = require('helmet');
