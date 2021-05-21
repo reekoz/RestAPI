@@ -59,6 +59,8 @@ exports.createPost = async (req, res, next) => {
         creator: req.userId
     });
 
+    console.log('Creating Post', post);
+
     try {
         await post.save();
         const user = await User.findById(req.userId);
