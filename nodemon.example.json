@@ -5,6 +5,7 @@
         "MONGO_ADDRESS": "",
         "MONGO_DEFAULT_DATABASE": "",
         "PORT": 3000,
-        "UNSPLASH_KEY": ""
+        "UNSPLASH_KEY": "",
+        "JWT_SECRET": ""
     }
 }

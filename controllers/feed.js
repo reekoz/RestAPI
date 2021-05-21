@@ -10,7 +10,7 @@ const unsplash = require('../services/unsplash');
 
 exports.getPosts = async (req, res, next) => {
     const currentPage = req.query.page || 1;
-    const perPage = 2;
+    const perPage = 6;
 
     try {
         const totalItems = await Post.countDocuments();
@@ -38,8 +38,6 @@ exports.getPosts = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
-    console.log(req.body);
-
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {

@@ -51,15 +51,15 @@ exports.login = async (req, res, next) => {
         });
 
         if (!user) {
-            const error = new Error('User not found');
-            error.statusCode = 404;
+            const error = new Error('User not found or wrong password');
+            error.statusCode = 401;
             throw error;
         }
 
         loadedUser = user;
         const isEqual = await bcrypt.compare(password, user.password);
         if (!isEqual) {
-            const error = new Error('Wrong password');
+            const error = new Error('User not found or wrong password');
             error.statusCode = 401;
             throw error;
         }
@@ -67,13 +67,14 @@ exports.login = async (req, res, next) => {
         const token = jwt.sign({
             email: loadedUser.email,
             userId: loadedUser._id.toString()
-        }, 'mysupersecretscretsecret', {
+        },  process.env.JWT_SECRET, {
             expiresIn: '1h'
         });
 
         res.status(200).json({
             token: token,
-            userId: loadedUser._id.toString()
+            userId: loadedUser._id.toString(),
+            name: loadedUser.name
         });
     } catch (err) {
         if (!err.statusCode) {
