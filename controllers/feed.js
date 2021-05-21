@@ -45,7 +45,7 @@ exports.createPost = async (req, res, next) => {
         error.statusCode = 422;
         next(error);
     }
-    
+
     const title = req.body.title;
     const content = req.body.content;
 
@@ -141,8 +141,7 @@ exports.updatePost = async (req, res, next) => {
         if (title !== post.title) {
             const image = await unsplash.getRandomPhoto(title, 50, 10);
             imageUrl = image ? image.urls.small : post.imageUrl;
-        }
-        else
+        } else
             imageUrl = post.imageUrl;
 
         if (post.creator._id.toString() !== req.userId) {
@@ -172,7 +171,6 @@ exports.updatePost = async (req, res, next) => {
         next(err);
     }
 };
-
 
 exports.deletePost = async (req, res, next) => {
     const postId = req.params.postId;
