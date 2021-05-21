@@ -1,8 +1,4 @@
-const {
-    validationResult
-} = require('express-validator');
-const fs = require('fs');
-const path = require('path');
+const { validationResult } = require('express-validator');
 const Post = require('../models/post');
 const User = require('../models/user');
 const io = require('../socket');
@@ -49,7 +45,7 @@ exports.createPost = async (req, res, next) => {
     const title = req.body.title;
     const content = req.body.content;
 
-    console.log('Try to get random photo with title', title);
+    console.log('Try to get random photo with title\'' + title + '\'');
 
     const image = await unsplash.getRandomPhoto(title, 50, 10);
 
