@@ -49,7 +49,13 @@ exports.createPost = async (req, res, next) => {
     const title = req.body.title;
     const content = req.body.content;
 
+    console.log('Try to get random photo with title', title);
+
     const image = await unsplash.getRandomPhoto(title, 50, 10);
+
+    if (!image)
+        console.log('Found no image for title \'' + title + '\'');
+    
     const imageUrl = image ? image.urls.small : null;
 
     const post = new Post({
