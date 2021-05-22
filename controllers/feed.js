@@ -47,7 +47,13 @@ exports.createPost = async (req, res, next) => {
 
     console.log('Try to get random photo with title\'' + title + '\'');
 
-    const image = await unsplash.getRandomPhoto(title, 50, 10);
+    const attempts = 4;
+    let image = await unsplash.getRandomPhoto(title, 50, 10);
+
+    while (!image && attempts > 0) {
+        image = await unsplash.getRandomPhoto(title, 50, 10);
+        attempts--;
+    }
 
     if (!image)
         console.log('Found no image for title \'' + title + '\'');
