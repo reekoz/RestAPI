@@ -51,6 +51,7 @@ exports.createPost = async (req, res, next) => {
     let image = await unsplash.getRandomPhoto(title, 50, 10);
 
     while (!image && attempts > 0) {
+        console.log(`Remaining attempts: ${attempts}`);
         image = await unsplash.getRandomPhoto(title, 50, 10);
         attempts--;
     }
