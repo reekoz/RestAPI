@@ -21,7 +21,11 @@ const userSchema = new Schema({
     posts: [{
         type: Schema.Types.ObjectId,
         ref: 'Post'
-    }]
+    }],
+    themeMode: {
+        type: String,
+        default: 'dark'
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);

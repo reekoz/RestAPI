@@ -76,6 +76,8 @@ exports.createPost = async (req, res, next) => {
       },
     });
 
+    const totalItems = await Post.countDocuments();
+
     res.status(201).json({
       message: 'Post created successfully!',
       post: post,
@@ -83,6 +85,7 @@ exports.createPost = async (req, res, next) => {
         _id: user._id,
         name: user.name,
       },
+      totalItems: totalItems,
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -158,9 +161,12 @@ exports.updatePost = async (req, res, next) => {
       post: result,
     });
 
+    const totalItems = await Post.countDocuments();
+
     res.status(200).json({
       message: 'Post updated',
       post: result,
+      totalItems: totalItems,
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -199,59 +205,6 @@ exports.deletePost = async (req, res, next) => {
 
     res.status(200).json({
       message: 'Post deleted',
-    });
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
-
-exports.getStatus = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.userId);
-    if (!user) {
-      const error = new Error('User not found');
-      error.statusCode = 404;
-      throw error;
-    }
-    res.status(200).json({
-      status: user.status,
-    });
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
-  }
-};
-
-exports.updateStatus = async (req, res, next) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    const error = new Error('Validation failed');
-    error.statusCode = 422;
-    error.data = errors.array();
-    next(error);
-  }
-
-  const newStatus = req.body.status;
-
-  try {
-    const user = await User.findById(req.userId);
-    if (!user) {
-      const error = new Error('User not found');
-      error.statusCode = 404;
-      throw error;
-    }
-
-    user.status = newStatus;
-    await user.save();
-    res.status(200).json({
-      message: 'Status updated!',
-      status: newStatus,
     });
   } catch (err) {
     if (!err.statusCode) {

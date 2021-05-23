@@ -45,15 +45,4 @@ router.put(
 // DELETE /feed/post/:postId
 router.delete('/post/:postId', isAuth, feedController.deletePost);
 
-// GET /auth/status
-router.get('/status', isAuth, feedController.getStatus);
-
-// PUT /auth/status
-router.put(
-  '/status',
-  isAuth,
-  [body('status').trim().notEmpty()],
-  feedController.updateStatus
-);
-
 module.exports = router;
