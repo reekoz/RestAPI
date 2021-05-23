@@ -48,7 +48,12 @@ router.put(
 // PUT /auth/settings
 router.put(
   '/settings/:userId',
-  [body('name').trim().notEmpty(), body('themeMode').trim().notEmpty()],
+  [
+    body('name').trim().notEmpty(),
+    body('themeMode').trim().notEmpty(),
+    body('color').trim().notEmpty(),
+    body('shade').trim(),
+  ],
   authController.updateSettings
 );
 

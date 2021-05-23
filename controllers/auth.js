@@ -62,11 +62,13 @@ exports.login = async (req, res, next) => {
       throw error;
     }
 
-    const token = jwt.sign({
+    const token = jwt.sign(
+      {
         email: loadedUser.email,
         userId: loadedUser._id.toString(),
       },
-      process.env.JWT_SECRET, {
+      process.env.JWT_SECRET,
+      {
         expiresIn: '1h',
       }
     );
@@ -75,7 +77,9 @@ exports.login = async (req, res, next) => {
       token: token,
       userId: loadedUser._id.toString(),
       name: loadedUser.name,
-      themeMode: loadedUser.themeMode || 'dark'
+      themeMode: loadedUser.themeMode || 'dark',
+      color: loadedUser.color || 'teal',
+      shade: loadedUser.shade,
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -98,6 +102,8 @@ exports.updateSettings = async (req, res, next) => {
   const themeMode = req.body.themeMode;
   const name = req.body.name;
   const userId = req.params.userId;
+  const color = req.body.color;
+  const shade = req.body.shade;
 
   if (!userId) {
     const error = new Error('User not found');
@@ -115,6 +121,9 @@ exports.updateSettings = async (req, res, next) => {
 
     user.themeMode = themeMode;
     user.name = name;
+    user.color = color;
+    user.shade = shade;
+
     await user.save();
 
     res.status(200).json({

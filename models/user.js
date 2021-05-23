@@ -25,7 +25,14 @@ const userSchema = new Schema({
     themeMode: {
         type: String,
         default: 'dark'
-    }
+    },
+    color: {
+        type: String,
+        default: 'teal'
+    },
+    shade: {
+        type: String
+    },
 });
 
 module.exports = mongoose.model('User', userSchema);
