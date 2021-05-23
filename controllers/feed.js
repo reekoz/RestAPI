@@ -65,6 +65,8 @@ exports.createPost = async (req, res, next) => {
     user.posts.push(post);
     await user.save();
 
+    const totalItems = await Post.countDocuments();
+
     io.getIO().emit('posts', {
       action: 'create',
       post: {
@@ -74,9 +76,8 @@ exports.createPost = async (req, res, next) => {
           name: user.name,
         },
       },
+      totalItems: totalItems,
     });
-
-    const totalItems = await Post.countDocuments();
 
     res.status(201).json({
       message: 'Post created successfully!',
@@ -85,7 +86,6 @@ exports.createPost = async (req, res, next) => {
         _id: user._id,
         name: user.name,
       },
-      totalItems: totalItems,
     });
   } catch (err) {
     if (!err.statusCode) {
@@ -156,17 +156,17 @@ exports.updatePost = async (req, res, next) => {
     post.imageUrl = imageUrl;
     const result = await post.save();
 
+    const totalItems = await Post.countDocuments();
+
     io.getIO().emit('posts', {
       action: 'update',
       post: result,
+      totalItems: totalItems,
     });
-
-    const totalItems = await Post.countDocuments();
 
     res.status(200).json({
       message: 'Post updated',
       post: result,
-      totalItems: totalItems,
     });
   } catch (err) {
     if (!err.statusCode) {
