@@ -9,15 +9,15 @@
   <li>Real-time CRUD of posts with Socket.IO (<a href="https://socket.io/">Socket.IO</a>)</li>
 </ul>
 
+### Configure ENV Variables
+<p>
+  Create a <strong>nodemon.json</strong> file based on <strong>nodemon.example.json</strong> (You will need a valid Unsplash API key)
+</p>
+
 ## Project setup
 ```
 npm install
 ```
-
-## Configure ENV Variables
-<p>
-  Create a <strong>nodemon.json</strong> file based on <strong>nodemon.example.json</strong> (You will need a valid Unsplash API key)
-</p>
 
 ### Compiles and serve for development
 ```
