@@ -2,6 +2,7 @@ const User = require('../models/user');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const logger = require('../services/logger');
 
 exports.signup = async (req, res, next) => {
   const errors = validationResult(req);
@@ -25,6 +26,8 @@ exports.signup = async (req, res, next) => {
       name: name,
     });
     const result = await user.save();
+
+    logger.info(`Just singup user '${email}' as '${name}'`);
 
     res.status(201).json({
       message: 'User created!',
@@ -72,6 +75,8 @@ exports.login = async (req, res, next) => {
         expiresIn: '1h',
       }
     );
+
+    logger.info(`Just login user '${email}' as '${loadedUser.name}'`);
 
     res.status(200).json({
       token: token,

@@ -5,8 +5,9 @@
   <li>API Served by Express with Nodemon (<a href="https://expressjs.com/">Express</a>, <a href="https://www.npmjs.com/package/nodemon/">Nodemon</a>)</li>
   <li>MongoDB and Mongoose ORM (<a href="https://mongoosejs.com/">Mongoose</a>)</li>
   <li>Auto generate image based on post's title using Unsplash API (<a href="https://unsplash.com/">Unsplash</a>, <a href="https://github.com/unsplash/unsplash-js/">Unsplash-js</a>)</li>
-  <li>Authentication (Signup & Login users) with JWT (<a href="https://jwt.io/">JWT</a>)</li>
-  <li>Real-time CRUD of posts with Socket.IO (<a href="https://socket.io/">Socket.IO</a>)</li>
+  <li>Authentication (Signup & Login users) with <a href="https://jwt.io/">JWT</a></li>
+  <li>Real-time CRUD of posts with <a href="https://socket.io/">Socket.IO</a></li>
+  <li>Logging powered by <a href="https://github.com/winstonjs/winston/">Winston</a></li>
 </ul>
 
 ### Configure ENV Variables

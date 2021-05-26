@@ -1,5 +1,6 @@
 const { createApi } = require('unsplash-js');
 const nodeFetch = require('node-fetch');
+const logger = require('../services/logger');
 
 exports.getRandomPhoto = async (query, maxPages, maxPerPage) => {
 
@@ -21,7 +22,7 @@ exports.getRandomPhoto = async (query, maxPages, maxPerPage) => {
   const totalPages = +totalResult.response.total_pages;
 
   if (total === 0) {
-    console.log(`Found no image(s) for query '${query}'`);
+    logger.warn(`Found no image(s) for query '${query}'`);
     return null;
   }
 
@@ -35,11 +36,11 @@ exports.getRandomPhoto = async (query, maxPages, maxPerPage) => {
   const perPage = Math.ceil(Math.random(1, maxPerPage) * maxPerPage);
   const index = Math.ceil(Math.random(1, perPage) * perPage) - 1;
 
-  console.log('Unsplash requst', {
+  logger.info('Unsplash request ' +  JSON.stringify({
     page,
     perPage,
     index,
-  });
+  }, null, 4));
 
   const result = await unsplash.search.getPhotos({ query, page, perPage });
 

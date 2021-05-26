@@ -1,8 +1,9 @@
 const { validationResult } = require('express-validator');
 const Post = require('../models/post');
 const User = require('../models/user');
-const io = require('../socket');
+const io = require('../services/socket');
 const unsplash = require('../services/unsplash');
+const logger = require('../services/logger');
 
 exports.getPosts = async (req, res, next) => {
   const currentPage = req.query.page || 1;
@@ -44,7 +45,7 @@ exports.createPost = async (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
 
-  console.log("Try to get random photo with title'" + title + "'");
+  logger.info(`Try to get random photo with title '${title}'`);
 
   let image = await unsplash.getRandomPhoto(title, 50, 10);
 
@@ -57,7 +58,7 @@ exports.createPost = async (req, res, next) => {
     creator: req.userId,
   });
 
-  console.log('Creating Post', post);
+  logger.info('Creating Post ' +  JSON.stringify(post, null, 4));
 
   try {
     await post.save();
@@ -154,6 +155,9 @@ exports.updatePost = async (req, res, next) => {
     post.title = title;
     post.content = content;
     post.imageUrl = imageUrl;
+
+    logger.info('Updateing post ' +  JSON.stringify(post, null, 4));
+
     const result = await post.save();
 
     const totalItems = await Post.countDocuments();
@@ -192,8 +196,10 @@ exports.deletePost = async (req, res, next) => {
       error.statusCode = 403;
       throw error;
     }
+    
+    logger.info('Deleting post ' +  JSON.stringify(post, null, 4));
 
-    await Post.findByIdAndRemove(postId);
+    await Post.findByIdAndRemove(postId, { useFindAndModify: false });
     const user = await User.findById(req.userId);
     user.posts.pull(postId);
     await user.save();
