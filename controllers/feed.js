@@ -39,7 +39,7 @@ exports.createPost = async (req, res, next) => {
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed');
     error.statusCode = 422;
-    next(error);
+    throw error;
   }
 
   const title = req.body.title;
@@ -126,7 +126,7 @@ exports.updatePost = async (req, res, next) => {
   if (!errors.isEmpty()) {
     const error = new Error('Validation failed');
     error.statusCode = 422;
-    next(error);
+    throw error;
   }
 
   const title = req.body.title;

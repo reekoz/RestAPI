@@ -11,7 +11,7 @@ exports.signup = async (req, res, next) => {
     const error = new Error('Validation failed');
     error.statusCode = 422;
     error.data = errors.array();
-    next(error);
+    throw error;
   }
 
   const email = req.body.email;
@@ -86,11 +86,13 @@ exports.login = async (req, res, next) => {
       color: loadedUser.color || 'teal',
       shade: loadedUser.shade,
     });
+    return;
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500;
     }
     next(err);
+    return err;
   }
 };
 
@@ -101,7 +103,7 @@ exports.updateSettings = async (req, res, next) => {
     const error = new Error('Validation failed');
     error.statusCode = 422;
     error.data = errors.array();
-    next(error);
+    throw error;
   }
 
   const themeMode = req.body.themeMode;
@@ -170,7 +172,7 @@ exports.updateStatus = async (req, res, next) => {
     const error = new Error('Validation failed');
     error.statusCode = 422;
     error.data = errors.array();
-    next(error);
+    throw error;
   }
 
   const newStatus = req.body.status;
